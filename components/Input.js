@@ -8,6 +8,7 @@ const Input = ({placeholder, value, onChangeText, secure}) => {
     return <TextInput 
         style={styles.input}
         placeholder={placeholder}
+        placeholderTextColor="#999"
         value={value}
         onChangeText={onChangeText}
         autoCapitalize="none"
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
         borderRadius:50,
         padding:10,
         backgroundColor:'#f8f8f8',
+        color:'#555'
     }    
 })
 

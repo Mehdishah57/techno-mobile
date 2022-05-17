@@ -13,12 +13,11 @@ import { Formik } from 'formik';
 import { loginSchema } from "../schemas/login";
 import login from '../services/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import WebView from 'react-native-webview';
 import LottieView from 'lottie-react-native';
 
 
 const Login = () => {
-  const [user, setUser] = useContext(UserContext);
+  const [,setUser] = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 

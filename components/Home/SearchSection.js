@@ -13,7 +13,6 @@ const SearchSection = ({handleSearch}) => {
                 value={search}
             />
         </View>
-
     )
 }
 
