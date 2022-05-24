@@ -6,38 +6,18 @@
  * @flow strict-local
  */
 
-import React, {useState, useEffect, useRef} from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { UserContext } from './global/UserContext';
-import AuthTab from './navigation/AuthTab';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import refreshUser from "./services/refreshUser";
-import DefaultTab from './navigation/DefaultTab';
+import UserProvider from './global/UserContext';
+import Tab from './navigation/Tab';
 
 const App = () => {
-  const [user, setUser] = useState({});
-
-  const fetchUser = useRef(null);
-  fetchUser.current = async() => {
-    if (user && user._id) return;
-    const token = await AsyncStorage.getItem("fyptoken");
-    if (!token) return;
-    const [data, error] = await refreshUser(token);
-    if (!error) return setUser({ ...data });
-    AsyncStorage.removeItem("fyptoken");
-  }
-
-  useEffect(()=>{
-    fetchUser.current();
-  },[])
-
   return (
-    <UserContext.Provider value={[user, setUser]}>
+    <UserProvider>
       <NavigationContainer>
-        {user._id? <AuthTab />: <DefaultTab />}
+        <Tab />
       </NavigationContainer>
-    </UserContext.Provider>
+    </UserProvider>
   );
 };
 

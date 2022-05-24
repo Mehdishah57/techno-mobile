@@ -1,8 +1,9 @@
 import axios from "axios";
+import { REACT_APP_BACKEND } from "@env";
 
 const uploadProfilePicture = async(image) => {
     try {
-        const { data } = await axios.post(`${process.env.REACT_APP_BACKEND}/api/user/uploadImage`,
+        const { data } = await axios.post(`${REACT_APP_BACKEND}/api/user/uploadImage`,
         image,
         {headers: {"auth-token": localStorage.getItem("fyptoken")}});
         return [data, null];

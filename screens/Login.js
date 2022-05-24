@@ -14,7 +14,7 @@ import { loginSchema } from "../schemas/login";
 import login from '../services/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LottieView from 'lottie-react-native';
-
+import { ActivityIndicator, Colors } from 'react-native-paper';
 
 const Login = () => {
   const [,setUser] = useContext(UserContext);
@@ -30,10 +30,11 @@ const Login = () => {
     if (error) return setError(error.response?.data || error.message || "We are having some issues 😢😢😢");
     await AsyncStorage.setItem("fyptoken", data.token)
     setUser(data.user);
+    navigation.navigate("User")
   }
 
   if(loading) return <View style={styles.container}>
-    <LottieView source={require("../animations/loader.json")} autoPlay loop />
+    <ActivityIndicator size="large" animating={true} color={Colors.black} />
   </View>
   return (
     <View style={styles.container}>
@@ -62,6 +63,7 @@ const Login = () => {
                 secure
               />
               {errors.password && <Text style={styles.error}>{errors.password}</Text>}
+              {error ? <Text style={styles.error}>{error}</Text>: null}
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity onPress={handleSubmit}>

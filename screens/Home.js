@@ -5,7 +5,7 @@ import ProductItem from '../components/Card';
 import SearchSection from '../components/Home/SearchSection';
 import { FAB } from 'react-native-paper';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
 	const [products, setProducts] = useState([]);
 	const [search, setSearch] = useState("");
 	const [pageNumber, setPageNumber] = useState(1);
@@ -29,19 +29,14 @@ const Home = ({navigation}) => {
 	return (
 		<View style={styles.container}>
 			<SearchSection handleSearch={handleSearch} />
-			<ScrollView style={{ width: '100%' }}>
+			<ScrollView style={styles.products} contentContainerStyle={styles.scroll}>
 				{products.map(
-					product => <ProductItem 
-						onPress={() => navigation.navigate("Details", {_id: product._id})}
-						key={product._id} 
-						item={product} 
+					product => <ProductItem
+						onPress={() => navigation.navigate("Details", { _id: product._id })}
+						key={product._id}
+						item={product}
 					/>)}
 			</ScrollView>
-			<FAB
-				style={styles.fab}
-				icon="menu"
-				onPress={() => console.log('Pressed')}
-			/>
 		</View>
 	)
 }
@@ -51,14 +46,17 @@ const styles = StyleSheet.create({
 		flex: 1,
 		height: "100%",
 		backgroundColor: '#FFF',
-		alignItems: 'center'
 	},
-	fab: {
-		position: 'absolute',
-		margin: 16,
-		right: 0,
-		bottom: 0,
-	  },
+	products: {
+		width: '100%'
+	},
+	scroll: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexWrap: 'wrap'
+	}
 })
 
 export default Home;

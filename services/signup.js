@@ -1,8 +1,9 @@
 import axios from "axios";
+import { REACT_APP_BACKEND } from "@env";
 
 const signup = async(payload) => {
     try {
-        const { data } = await axios.post(`http://192.168.18.4:3500/api/user/signup`,payload);
+        const { data } = await axios.post(`${REACT_APP_BACKEND}/api/user/signup`,payload);
         return [data, null]
     } catch (error) {
         return [null, error]

@@ -1,9 +1,10 @@
 import axios from "axios";
+import { REACT_APP_BACKEND } from "@env";
 
 const getProducts = async({...rest}) => {
     try {
         const { data } = await axios.post(
-            `http://192.168.18.4:3500/api/product/`,{...rest})
+            `${REACT_APP_BACKEND}/api/product/`,{...rest})
         return [data, null]
     } catch (error) {
         return [error, null]
