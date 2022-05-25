@@ -11,20 +11,20 @@ const Favourite = ({ navigation, product }) => {
 	const checkFavourite = useRef();
 
 	checkFavourite.current = () => {
-		if(!user?.favourites?.length) return;
+		if (!user?.favourites?.length) return;
 		const fav = user.favourites.find(id => id === product._id);
-		if(!fav) return;
+		if (!fav) return;
 		setIsFavourite(true);
 	}
 
-	useLayoutEffect(()=>{
+	useLayoutEffect(() => {
 		checkFavourite.current();
-	},[])
-	
+	}, [])
+
 	const addToFavourites = async () => {
 		if (!user?._id) return navigation.navigate("Login");
 		const favourites = user.favourites.find(id => id === product._id);
-		if (favourites) return 
+		if (favourites) return
 		setUser({ ...user, favourites: [...user.favourites, product._id] })
 		await addToFav(product._id);
 	}
@@ -32,17 +32,17 @@ const Favourite = ({ navigation, product }) => {
 	const removeFromFavourites = async () => {
 		if (!user?._id) return navigation.navigate("Login");
 		const favourites = user.favourites.filter(id => id !== product._id);
-		if (!favourites) return 
+		if (!favourites) return
 		setUser({ ...user, favourites });
 		await removeFromFav(product._id);
 	}
 
 	return (
-		<TouchableOpacity onPress={isFavourite ? removeFromFavourites: addToFavourites}>
-			<MaterialCommunityIcons 
-				name={isFavourite ? 'heart': 'heart-outline'} 
-				color={user?._id ? 'red': "gray"} 
-				size={20} 
+		<TouchableOpacity onPress={isFavourite ? removeFromFavourites : addToFavourites}>
+			<MaterialCommunityIcons
+				name={isFavourite ? 'heart' : 'heart-outline'}
+				color={user?._id ? 'red' : "gray"}
+				size={20}
 			/>
 		</TouchableOpacity>
 	)

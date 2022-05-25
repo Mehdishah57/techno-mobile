@@ -10,13 +10,16 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import UserProvider from './global/UserContext';
 import Tab from './navigation/Tab';
+import FilterProvider from './global/FilterContext';
 
 const App = () => {
   return (
     <UserProvider>
-      <NavigationContainer>
-        <Tab />
-      </NavigationContainer>
+      <FilterProvider>
+        <NavigationContainer>
+          <Tab />
+        </NavigationContainer>
+      </FilterProvider>
     </UserProvider>
   );
 };

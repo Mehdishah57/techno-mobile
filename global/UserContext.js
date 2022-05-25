@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import refreshUser from "../services/refreshUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import socket from "../socket/socket";
 
 export const UserContext = React.createContext({});
 
@@ -13,7 +14,10 @@ const UserProvider = ({children}) => {
       const token = await AsyncStorage.getItem("fyptoken");
       if (!token) return;
       const [data, error] = await refreshUser(token);
-      if (!error) return setUser({ ...data });
+      if (!error) {
+        socket.emit("joinMyId",data._id)
+        return setUser({ ...data })
+      };
       AsyncStorage.removeItem("fyptoken");
     }
   

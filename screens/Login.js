@@ -15,6 +15,7 @@ import login from '../services/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LottieView from 'lottie-react-native';
 import { ActivityIndicator, Colors } from 'react-native-paper';
+import socket from '../socket/socket';
 
 const Login = () => {
   const [,setUser] = useContext(UserContext);
@@ -30,6 +31,7 @@ const Login = () => {
     if (error) return setError(error.response?.data || error.message || "We are having some issues 😢😢😢");
     await AsyncStorage.setItem("fyptoken", data.token)
     setUser(data.user);
+    socket.emit("joinMyId",data.user._id)
     navigation.navigate("User")
   }
 

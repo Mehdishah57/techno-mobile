@@ -24,10 +24,8 @@ const ProductDetails = ({ route, navigation }) => {
 		fetchProduct.current();
 	}, [])
 
-
-
 	if (loading) return <View style={styles.loadingContainer}>
-		<ActivityIndicator size="large" animating={true} color={Colors.grey400} />
+		<ActivityIndicator size="large" animating={true} color={Colors.black} />
 	</View>
 	return (
 		<View style={styles.container}>
@@ -49,7 +47,7 @@ const ProductDetails = ({ route, navigation }) => {
 			<View style={styles.btnContiner}>
 				<TouchableOpacity>
 					<View style={styles.btn}>
-					<MaterialCommunityIcons name='message' color="white" size={20} />
+						<MaterialCommunityIcons name='message' color="white" size={20} />
 						<Text style={styles.btnText}>Message</Text>
 					</View>
 				</TouchableOpacity>
@@ -130,26 +128,26 @@ const styles = StyleSheet.create({
 	},
 	btnContiner: {
 		display: 'flex',
-		flexDirection:'row',
+		flexDirection: 'row',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
-		padding:10
+		padding: 10
 	},
 	btn: {
-		display:'flex',
-		flexDirection:'row',
-		justifyContent:'center',
-		alignItems:'center',
-		backgroundColor:'black',
-		padding:10,
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'black',
+		padding: 10,
 		width: 120,
-		borderRadius:10
+		borderRadius: 10
 	},
-	btnText:{
-		color:'white',
-		fontWeight:'bold',
-		textAlign:'center',
-		marginLeft:5
+	btnText: {
+		color: 'white',
+		fontWeight: 'bold',
+		textAlign: 'center',
+		marginLeft: 5
 	}
 })
 

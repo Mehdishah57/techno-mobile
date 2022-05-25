@@ -1,36 +1,45 @@
 import * as React from 'react';
-import { TouchableOpacity, StyleSheet, View, Text } from 'react-native'
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const ProductItem = ({ item, onPress }) => (
   <View style={styles.container}>
     <TouchableOpacity onPress={onPress}>
-      <Card style={{padding:10}}>
-        <Card.Cover source={{ uri: item.picture.image1.url }} />
-        <Text style={styles.text}>{item.title}</Text>
-        <Text style={styles.price}>RS {item.price}</Text>
-        {/* <Card.Content>
-          <Title style={styles.text}>{item.title}</Title>
-          <Paragraph>{item.location.city + " " + item.location.province}</Paragraph>
-        </Card.Content> */}
-      </Card>
+      <Image style={styles.image} source={{ uri: item.picture.image1.url }} />
+      <Text style={styles.text}>{item.title}</Text>
     </TouchableOpacity>
+    <View style={styles.bottom}>
+        <Text style={styles.price}>RS {item.price}</Text>
+        <TouchableOpacity>
+          <FontAwesome5 name='heart' color='red' size={20} />
+        </TouchableOpacity>
+      </View>
   </View>
 );
 
 const styles = StyleSheet.create({
   container: {
-    width: 180,
-    borderRadius:10,
+    width: '40%',
+    borderRadius: 10,
+    padding: 10
   },
-  text:{
-    fontSize:12,
-    color:'black'
+  text: {
+    fontSize: 16,
+    color: 'black'
   },
   price: {
-    color:'green',
-    fontWeight:'bold',
-    fontSize:12
+    color: 'green',
+    fontWeight: 'bold',
+    fontSize: 14
+  },
+  image: {
+    width: '100%',
+    height: 200
+  },
+  bottom: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 })
 
