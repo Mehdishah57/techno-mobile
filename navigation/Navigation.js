@@ -16,19 +16,21 @@ import MyAds from '../screens/MyAds';
 import ChangePhone from '../screens/ChangePhone';
 import SubCategoryList from '../screens/SubCategoryList';
 import CityList from '../components/Home/CityList';
+import { ThemeContext } from '../global/ThemeContext';
+import SearchHome from '../screens/SearchHome';
 
-const Stack = () => {
+const HomeStack = () => {
 	const Stack = createNativeStackNavigator();
 	return <Stack.Navigator
 		screenOptions={() => ({
 			headerShown: false,
 		})}>
 		<Stack.Screen name="Landing" component={Home} />
-		<Stack.Screen name="Details" component={ProductDetails} />
 		<Stack.Screen name='Login' component={Login} />
 		<Stack.Screen name='SignUp' component={Signup} />
 		<Stack.Screen name="SubCategory" component={SubCategoryList} />
 		<Stack.Screen name="Cities" component={CityList} />
+		<Stack.Screen name="SearchHome" component={SearchHome} />
 	</Stack.Navigator>
 }
 
@@ -48,7 +50,7 @@ const ProfileStack = () => {
 	const Stack = createNativeStackNavigator()
 	return <Stack.Navigator
 		screenOptions={() => ({
-			headerShown:false
+			headerShown: false
 		})}
 	>
 		<Stack.Screen name="Profile" component={Profile} />
@@ -60,20 +62,28 @@ const ProfileStack = () => {
 
 const Tab = () => {
 	const [user] = useContext(UserContext)
-
+	const [theme] = useContext(ThemeContext);
 	const Tab = createBottomTabNavigator();
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
-				headerShown: false
+				headerShown: false,
+				tabBarActiveBackgroundColor: theme === "dark" ? "black" : "white",
+				tabBarInactiveBackgroundColor: theme === "dark" ? "#333333" : "white",
+				tabBarActiveTintColor: theme === "dark" ? "white" : "black",
+				tabBarStyle: {
+					borderTopWidth: 0
+				}
 			})}>
 			<Tab.Screen
 				name='Home'
-				component={Stack}
+				component={HomeStack}
 				options={{
 					tabBarLabel: 'Home',
-					tabBarActiveTintColor: 'black',
-					tabBarIcon: ({ color, size }) => <FontAwesome5 name='home' color={color} size={size} />
+					tabBarIcon: ({ color, size }) => <FontAwesome5
+						name='home'
+						color={color}
+						size={size} />
 				}}
 			/>
 			<Tab.Screen
@@ -81,8 +91,10 @@ const Tab = () => {
 				component={user._id ? ChatStack : Login}
 				options={{
 					tabBarLabel: 'Chat',
-					tabBarActiveTintColor: 'black',
-					tabBarIcon: ({ color, size }) => <FontAwesome5 name='envelope' color={color} size={size} />
+					tabBarIcon: ({ color, size }) => <FontAwesome5
+						name='envelope'
+						color={color}
+						size={size} />
 				}}
 			/>
 			<Tab.Screen
@@ -90,18 +102,34 @@ const Tab = () => {
 				component={user._id ? Sell : Login}
 				options={{
 					tabBarLabel: 'Sell',
-					tabBarActiveTintColor: 'black',
-					tabBarIcon: ({ color, size }) => <FontAwesome5 name='plus' color={color} size={size} />
+					tabBarIcon: ({ color, size }) => <FontAwesome5
+						name='plus'
+						color={color}
+						size={size} />
 				}}
 			/>
 			<Tab.Screen name='User' component={user._id ? ProfileStack : Login}
 				options={{
 					tabBarLabel: 'User',
-					tabBarActiveTintColor: 'black',
-					tabBarIcon: ({ color, size }) => <FontAwesome5 name='user' color={color} size={size} />
+					tabBarIcon: ({ color, size }) => <FontAwesome5
+						name='user'
+						color={color}
+						size={size} />
 				}} />
 		</Tab.Navigator>
 	)
 }
 
-export default Tab;
+const Stack = () => {
+	const Stack = createNativeStackNavigator();
+	return <Stack.Navigator
+		screenOptions={{
+			headerShown: false
+		}}
+	>
+		<Stack.Screen name='Tab' component={Tab} />
+		<Stack.Screen name="Details" component={ProductDetails} />
+	</Stack.Navigator>
+}
+
+export default Stack;

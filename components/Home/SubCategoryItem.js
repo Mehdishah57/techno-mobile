@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react';
+import React, {useContext} from 'react';
 import TouchBox from '../TouchBox';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { ThemeContext } from '../../global/ThemeContext';
 
 const SubCategoryItem = ({item, onPress}) => {
+  const [theme] = useContext(ThemeContext);
   return (
     <TouchBox onPress={onPress}>
-      <View style={styles.container}>
-        <Text style={styles.text}>{item}</Text>
-        <FontAwesome5 name='angle-right' size={20} />
+      <View style={[styles.container, backgroundStyles[theme]]}>
+        <Text style={[styles.text, textStyles[theme]]}>{item}</Text>
+        <FontAwesome5 name='angle-right' size={20} color={textStyles[theme].color} />
       </View>
     </TouchBox>
   )
@@ -27,6 +29,16 @@ const styles = StyleSheet.create({
     textAlign:'left',
     color:'gray'
   }
+})
+
+const backgroundStyles = StyleSheet.create({
+	dark: { backgroundColor: '#333333' },
+  light: { backgroundColor: 'white' }
+})
+
+const textStyles = StyleSheet.create({
+	dark: { color: 'white' },
+	light: { color: 'black' }
 })
 
 export default SubCategoryItem;

@@ -1,15 +1,25 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+	ScrollView,
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	Linking,
+	Platform
+} from "react-native";
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import Carousel from '../components/ProductDetails/Carousel';
 import fetchProductyById from "../services/fetchProductById";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { UserContext } from '../global/UserContext';
 import Favourite from '../components/ProductDetails/Favourite';
+import MessageDialog from '../components/MessageDialog';
 
 const ProductDetails = ({ route, navigation }) => {
 	const [product, setProduct] = useState({});
 	const [loading, setLoading] = useState(true);
+	const [visible, setVisible] = useState(false);
 	const [user, setUser] = useContext(UserContext);
 	const fetchProduct = useRef();
 
@@ -23,6 +33,17 @@ const ProductDetails = ({ route, navigation }) => {
 	useEffect(() => {
 		fetchProduct.current();
 	}, [])
+
+	const handleCall = () => {
+		let number = "";
+		if (Platform.OS === 'ios')
+			number = `telprompt:${product.owner?.phoneNumber}`
+		else if (Platform.OS === 'android')
+			number = `tel:${product.owner?.phoneNumber}`
+		else
+			return alert("Calling for Your Platform isn't Supported.\nUser Phone is: " + product.owner?.phoneNumber)
+		Linking.openURL(number);
+	}
 
 	if (loading) return <View style={styles.loadingContainer}>
 		<ActivityIndicator size="large" animating={true} color={Colors.black} />
@@ -44,14 +65,15 @@ const ProductDetails = ({ route, navigation }) => {
 					<Text style={styles.description}>{product.description}</Text>
 				</View>
 			</ScrollView>
+			<MessageDialog visible={visible} setVisible={setVisible} product={product} />
 			<View style={styles.btnContiner}>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={()=>setVisible(true)}>
 					<View style={styles.btn}>
 						<MaterialCommunityIcons name='message' color="white" size={20} />
 						<Text style={styles.btnText}>Message</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={handleCall}>
 					<View style={styles.btn}>
 						<MaterialCommunityIcons name='phone' color="white" size={20} />
 						<Text style={styles.btnText}>Call</Text>

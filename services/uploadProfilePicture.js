@@ -1,11 +1,14 @@
 import axios from "axios";
 import { REACT_APP_BACKEND } from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const uploadProfilePicture = async(image) => {
     try {
+        const token = await AsyncStorage.getItem("fyptoken")
         const { data } = await axios.post(`${REACT_APP_BACKEND}/api/user/uploadImage`,
         image,
-        {headers: {"auth-token": localStorage.getItem("fyptoken")}});
+        {headers: {"auth-token": token}});
         return [data, null];
     } catch (error) {
         return [null, error];

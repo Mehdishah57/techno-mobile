@@ -1,11 +1,13 @@
-import React, {useState, createContext} from "react";
+import React, {useState, createContext, useMemo} from "react";
 
 export const FilterContext = createContext(null);
 
 const FilterProvider = ({children}) => {
     const [filters, setFilters] = useState({});
 
-    return <FilterContext.Provider value={[filters, setFilters]}>
+    const state = useMemo(() => ([filters, setFilters]), [filters, setFilters]);
+
+    return <FilterContext.Provider value={state}>
         {children}
     </FilterContext.Provider>
 }

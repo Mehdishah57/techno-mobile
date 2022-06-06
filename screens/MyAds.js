@@ -1,14 +1,30 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
+import { ThemeContext } from '../global/ThemeContext'
 
 const MyAds = () => {
+  const [theme] = useContext(ThemeContext)
   return (
-    <View>
+    <View style={[styles.container, backgroundStyles[theme]]}>
       <Text>MyAds</Text>
     </View>
   )
 }
 
-export default MyAds
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+})
 
-const styles = StyleSheet.create({})
+const backgroundStyles = StyleSheet.create({
+	dark: { backgroundColor: 'black' },
+  light: { backgroundColor: 'white' }
+  })
+  
+  const textStyles = StyleSheet.create({
+	dark: { color: 'white' },
+	light: { color: 'black' }
+  })
+
+export default MyAds

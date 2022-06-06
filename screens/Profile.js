@@ -1,14 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { Avatar } from 'react-native-paper';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { UserContext } from '../global/UserContext';
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import socket from '../socket/socket';
+import ItemSeperator from '../components/ItemSeperator';
+import UserImage from '../components/Profile/UserImage';
+import { ThemeContext } from '../global/ThemeContext';
+import ProfileItem from '../components/Profile/ProfileItem';
 
 const Profile = () => {
 	const [user, setUser] = useContext(UserContext);
+	const [theme] = useContext(ThemeContext);
+	const [image, setImage] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	const navigation = useNavigation();
 
@@ -19,42 +24,34 @@ const Profile = () => {
 	}
 
 	return (
-		<View style={styles.container}>
-			<TouchableOpacity>
-				{user?.image?.url ?
-					<Avatar.Image size={200} source={{ uri: user?.image?.url }} />
-					: <Avatar.Text label={user?.name[0]} />}
-			</TouchableOpacity>
-			<Text style={styles.userName}>{user?.name}</Text>
+		<View style={[styles.container,backgroundStyles[theme]]}>
+			<UserImage />
+			<Text style={[styles.userName, textStyles[theme]]}>{user?.name}</Text>
 			<View style={styles.menu}>
-				<TouchableOpacity onPress={()=>navigation.navigate("Favourites")}>
-					<View style={styles.item}>
-						<Text style={styles.text}>
-							<FontAwesome5 name='heart' size={20} /> Favourites
-						</Text>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity onPress={()=>navigation.navigate("MyAds")}>
-					<View style={styles.item}>
-						<Text style={styles.text}>
-							<FontAwesome5 name='user' size={20} /> My Ads
-						</Text>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity onPress={()=>navigation.navigate("ChangePhone")}>
-					<View style={styles.item}>
-						<Text style={styles.text}>
-							<FontAwesome5 name='phone' size={20} /> Change Phone Number
-						</Text>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity onPress={handleLogout}>
-					<View style={styles.item}>
-						<Text style={styles.text}>
-							<FontAwesome5 name='sign-out-alt' size={20} /> Logout
-						</Text>
-					</View>
-				</TouchableOpacity>
+				<ItemSeperator />
+				<ProfileItem 
+					onPress={() => navigation.navigate("Favourites")}
+					title="Favourites"
+					icon="heart"
+				/>
+				<ItemSeperator />
+				<ProfileItem 
+					onPress={() => navigation.navigate("MyAds")}
+					title="My Ads"
+					icon="user"
+				/>
+				<ItemSeperator />
+				<ProfileItem 
+					onPress={() => navigation.navigate("ChangePhone")}
+					title="Change Phone Number"
+					icon="phone"
+				/>
+				<ItemSeperator />
+				<ProfileItem 
+					onPress={handleLogout}
+					title="Logout"
+					icon="sign-out-alt"
+				/>
 			</View>
 		</View>
 	)
@@ -65,36 +62,43 @@ const styles = StyleSheet.create({
 		width: "100%",
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'white'
 	},
 	userName: {
 		fontWeight: 'bold',
 		fontSize: 18,
-		margin: 10,
-		color: 'black'
+		margin: 10
 	},
 	menu: {
 		display: 'flex',
 		margin: 10,
 		width: '100%',
-		padding: 10
 	},
 	item: {
-		display:'flex',
-		justifyContent:'center',
-		alignItems:'flex-start',
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 		width: '100%',
-		borderWidth: 1,
-		borderColor: 'black',
-		borderRadius: 10,
-		backgroundColor: 'black',
-		padding: 10,
-		marginBottom:10
+		padding: 20,
+		marginBottom: 10
 	},
 	text: {
-		color: 'white',
 		fontWeight: 'bold',
+	},
+	favs: {
+		color: 'red'
 	}
 })
+
+const backgroundStyles = StyleSheet.create({
+	dark: { backgroundColor: 'black' },
+	light: { backgroundColor: 'white' }
+})
+
+const textStyles = StyleSheet.create({
+	dark: { color: 'white' },
+	light: { color: 'black' }
+})
+
 
 export default Profile;

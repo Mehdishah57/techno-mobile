@@ -3,11 +3,11 @@ import React, {useState, useEffect, useRef, useContext} from 'react';
 import getCategories from "../../services/getCategories";
 import CategoryBox from './CategoryBox';
 import { useNavigation } from '@react-navigation/native';
-import { FilterContext } from '../../global/FilterContext';
+import { ThemeContext } from '../../global/ThemeContext';
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
-  const [filters, setFilters] = useContext(FilterContext)
+  const [theme] = useContext(ThemeContext);
 	const fetchData = useRef(null);
 
   const navigation = useNavigation();
@@ -23,14 +23,8 @@ const CategoryList = () => {
 
   const handlePress = (item) => navigation.navigate("SubCategory",{item});
 
-  const removeCategoryFilter = () => {
-    if(filters.mainCategory)
-      setFilters({...filters, mainCategory:undefined,subCategory:undefined})
-  }
-
   return (
-    <View style={styles.container}>
-      <CategoryBox item={{name: "All Categories"}} onPress={removeCategoryFilter} />
+    <View style={[styles.container,backgroundStyles[theme]]}>
       <FlatList 
         data={categories}
         renderItem={({item})=><CategoryBox 
@@ -48,8 +42,20 @@ const styles = StyleSheet.create({
     display:'flex',
     width: '100%',
     flexDirection:'row',
-    padding: 10
+    padding: 10,
+    marginTop: 10
   }
 })
+
+const backgroundStyles = StyleSheet.create({
+  dark: { backgroundColor: 'black' },
+  light: { backgroundColor: 'white' }
+})
+
+const textStyles = StyleSheet.create({
+  dark: { color: 'white' },
+  light: { color: 'black' }
+})
+
 
 export default CategoryList

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useMemo} from "react";
 import refreshUser from "../services/refreshUser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import socket from "../socket/socket";
@@ -7,6 +7,8 @@ export const UserContext = React.createContext({});
 
 const UserProvider = ({children}) => {
     const [user, setUser] = useState({});
+
+    const state = useMemo(() => ([user, setUser]), [user,setUser]);
 
     const fetchUser = useRef(null);
     fetchUser.current = async() => {
@@ -25,7 +27,7 @@ const UserProvider = ({children}) => {
       fetchUser.current();
     },[])
 
-    return <UserContext.Provider value={[user, setUser]}>
+    return <UserContext.Provider value={state}>
         {children}
     </UserContext.Provider>
 }
