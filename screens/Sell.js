@@ -7,6 +7,7 @@ import CategorySection from '../components/Sell/CategorySection';
 import LocationSection from '../components/Sell/LocationSection';
 import { productSchema } from '../schemas/product';
 import ErrorText from '../components/ErrorText';
+import ImageSection from '../components/Sell/ImageSection';
 
 
 const Sell = ({ navigation }) => {
@@ -29,6 +30,14 @@ const Sell = ({ navigation }) => {
     <View style={[styles.container, backgroundStyles[theme]]}>
       <Formik
         initialValues={{
+          picture: {
+            image1: '',
+            image2: '',
+            image3: '',
+            image4: '',
+            image5: '',
+            image6: '',
+          },
           title: '',
           price: '',
           description: '',
@@ -41,10 +50,11 @@ const Sell = ({ navigation }) => {
         onSubmit={handleSubmit}
         validationSchema={productSchema}
       >
-        {({ handleSubmit, handleChange, errors, touched, setFieldTouched }) => (
+        {({ handleSubmit, handleChange, errors, touched, setFieldTouched, setFieldValue }) => (
           <ScrollView style={[styles.p10]}>
             <View style={[styles.fieldWrapper,styles.border, borderStyles[theme]]}>
               <Text style={[styles.head,textStyles[theme]]}>Add Images for your item</Text>
+              <ImageSection />
             </View>
             <View style={[styles.fieldWrapper,styles.border, borderStyles[theme]]}>
               <Text style={[styles.head,textStyles[theme]]}>Product Title</Text>
@@ -72,7 +82,13 @@ const Sell = ({ navigation }) => {
             </View>
             <View style={[styles.fieldWrapper,styles.border, borderStyles[theme]]}>
               <Text style={[styles.head,textStyles[theme]]}>Choose a category for your item</Text>
-              <CategorySection />
+              <CategorySection 
+                categoryError={errors.category} 
+                categoryTouched={touched.category}
+                subCategoryError={errors.subCategory}
+                subCategoryTouched={touched.subCategory}
+                setFieldValue={setFieldValue}
+              />
             </View>
             <View style={[styles.fieldWrapper,styles.border, borderStyles[theme]]}>
             <Text style={[styles.head,textStyles[theme]]}>Choose a location</Text>
