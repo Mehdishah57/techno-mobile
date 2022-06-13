@@ -1,26 +1,36 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
-import { Searchbar } from 'react-native-paper';
+import { View, StyleSheet, Text } from 'react-native'
+import React, { useState, useContext } from 'react'
+import { TextInput, TouchableRipple } from 'react-native-paper';
+import { SearchContext } from '../../global/SearchContext';
 
-const SearchSection = ({ handleSearch }) => {
-	const [search, setSearch] = useState("");
+const SearchSection = () => {
+	const [text, setText] = useState("");
+	const [, setSearch] = useContext(SearchContext);
+
+	const handlePress = () => setSearch(text);
+
 	return (
-		<View style={styles.search}>
-			<Searchbar
-				placeholder="Search"
-				onChangeText={text => setSearch(text)}
-				onIconPress={() => handleSearch(search)}
-				value={search}
+		<View style={styles.main}>
+			<TextInput 
+				value={text}
+				label="Search"
+				mode="outlined"
+				onChangeText={text => setText(text)}
 			/>
+			<TouchableRipple onPress={handlePress}>
+				<View>
+					<Text>Search</Text>				
+				</View>
+			</TouchableRipple>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
-	search: {
-		justifyContent: 'center',
+	main: {
 		width: '100%',
-		marginBottom: 10
+		height: '100%',
+		padding: 10
 	}
 })
 

@@ -1,17 +1,20 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import React, { useContext, useMemo } from 'react';
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from 'react-native'
+import React, { useContext, useMemo, useState } from 'react';
 import { ThemeContext } from '../global/ThemeContext';
 import { Formik } from 'formik';
 import { TextInput, TouchableRipple } from 'react-native-paper';
 import CategorySection from '../components/Sell/CategorySection';
-import LocationSection from '../components/Sell/LocationSection';
 import { productSchema } from '../schemas/product';
 import ErrorText from '../components/ErrorText';
 import ImageSection from '../components/Sell/ImageSection';
+import Icons from "react-native-vector-icons/Entypo"
+import addProduct from '../services/addProduct';
 
-
-const Sell = ({ navigation }) => {
+const Sell = ({ route, navigation }) => {
+  const [loading, setLoading] = useState(false);
   const [theme] = useContext(ThemeContext);
+  
+  const {cityName, cityId} = route.params || {};
 
   const fieldTheme = useMemo(() => ({
 		colors: {
@@ -23,20 +26,33 @@ const Sell = ({ navigation }) => {
 	}), [theme])
 
   const handleSubmit = async values => {
-    console.log(values)
+    if(!cityId) return alert("Please select a city!")
+    setLoading(true)
+    const body = { ...values, location: cityId };
+    const [data, error] = await addProduct(body);
+    if(error)
+      {
+        setLoading(false);
+        console.log(error.response?.data )
+        return alert(error.response?.data || "There was an error posting your item");
+      }
+    navigation.navigate("Landing");
   }
 
+  if(loading) return <View style={[styles.container, backgroundStyles[theme]]}>
+    <ActivityIndicator size={"large"} color={textStyles[theme].color} />
+  </View>
   return (
     <View style={[styles.container, backgroundStyles[theme]]}>
       <Formik
         initialValues={{
           picture: {
             image1: '',
-            image2: '',
-            image3: '',
-            image4: '',
-            image5: '',
-            image6: '',
+            image2: undefined,
+            image3: undefined,
+            image4: undefined,
+            image5: undefined,
+            image6: undefined,
           },
           title: '',
           price: '',
@@ -44,17 +60,22 @@ const Sell = ({ navigation }) => {
           category: '',
           subCategory: '',
           location: '',
-          lng: '',
-          lat: ''
         }}
         onSubmit={handleSubmit}
         validationSchema={productSchema}
       >
-        {({ handleSubmit, handleChange, errors, touched, setFieldTouched, setFieldValue }) => (
+        {({ 
+          handleSubmit, 
+          handleChange, 
+          errors, 
+          values, 
+          touched, 
+          setFieldTouched, 
+          setFieldValue }) => (
           <ScrollView style={[styles.p10]}>
             <View style={[styles.fieldWrapper,styles.border, borderStyles[theme]]}>
               <Text style={[styles.head,textStyles[theme]]}>Add Images for your item</Text>
-              <ImageSection />
+              <ImageSection touched={touched.picture} error={errors.picture} pictures={values.picture} setFieldValue={setFieldValue} />
             </View>
             <View style={[styles.fieldWrapper,styles.border, borderStyles[theme]]}>
               <Text style={[styles.head,textStyles[theme]]}>Product Title</Text>
@@ -92,7 +113,14 @@ const Sell = ({ navigation }) => {
             </View>
             <View style={[styles.fieldWrapper,styles.border, borderStyles[theme]]}>
             <Text style={[styles.head,textStyles[theme]]}>Choose a location</Text>
-              <LocationSection />
+              <TouchableRipple 
+                rippleColor={backgroundStyles[theme].backgroundColor} 
+                onPress={()=>navigation.navigate("LocationSection")}>
+                <View style={[borderStyles[theme],styles.locationItem]}>
+                  <Text style={[styles.locationText,textStyles[theme]]}>{cityName || "Location"}</Text>
+                  <Icons name='chevron-down' size={20} color={textStyles[theme].color} /> 
+                </View>
+              </TouchableRipple>
             </View>
             <View style={[styles.fieldWrapper,styles.border, borderStyles[theme]]}>
               <Text style={[styles.head,textStyles[theme]]}>Add a Description</Text>
@@ -149,6 +177,19 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: 'center'
+  },
+  locationText: {
+    fontSize: 14
+  },
+  locationItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 15,
+    borderWidth: 2,
+    marginTop: 10,
+    borderRadius: 5
   }
 })
 

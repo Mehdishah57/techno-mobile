@@ -52,10 +52,4 @@ const backgroundStyles = StyleSheet.create({
   light: { backgroundColor: 'white' }
 })
 
-const textStyles = StyleSheet.create({
-  dark: { color: 'white' },
-  light: { color: 'black' }
-})
-
-
 export default CategoryList

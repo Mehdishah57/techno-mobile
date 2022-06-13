@@ -6,9 +6,8 @@ const productSchema = yup.object({
     price: yup.number("Please avoid using \",\" or other characters").required("Please provide product price"),
     category: yup.string().required("Please provide product category"),
     subCategory: yup.string().required("Please provide sub-category for product"),
-    location: yup.string().required(),
     picture: yup.object({
-        image1: yup.string().required(),
+        image1: yup.string().required("Please upload atleast one image"),
         image2: yup.string().notRequired(),
         image3: yup.string().notRequired(),
         image4: yup.string().notRequired(),

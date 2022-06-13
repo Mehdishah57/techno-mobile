@@ -18,6 +18,8 @@ import SubCategoryList from '../screens/SubCategoryList';
 import CityList from '../components/Home/CityList';
 import { ThemeContext } from '../global/ThemeContext';
 import SearchHome from '../screens/SearchHome';
+import LocationSection from '../components/Sell/LocationSection';
+import SearchSection from "../components/Home/SearchSection";
 
 const HomeStack = () => {
 	const Stack = createNativeStackNavigator();
@@ -30,7 +32,6 @@ const HomeStack = () => {
 		<Stack.Screen name='SignUp' component={Signup} />
 		<Stack.Screen name="SubCategory" component={SubCategoryList} />
 		<Stack.Screen name="Cities" component={CityList} />
-		<Stack.Screen name="SearchHome" component={SearchHome} />
 	</Stack.Navigator>
 }
 
@@ -58,6 +59,21 @@ const ProfileStack = () => {
 		<Stack.Screen name="MyAds" component={MyAds} />
 		<Stack.Screen name="ChangePhone" component={ChangePhone} />
 	</Stack.Navigator>
+}
+
+const SellStack = () => {
+	const Stack = createNativeStackNavigator();
+
+	return (
+		<Stack.Navigator
+			screenOptions={() => ({
+				headerShown: false
+			})}
+		>
+			<Stack.Screen name='Sell' component={Sell} />
+			<Stack.Screen name='LocationSection' component={LocationSection} />
+		</Stack.Navigator>
+	)
 }
 
 const Tab = () => {
@@ -98,8 +114,8 @@ const Tab = () => {
 				}}
 			/>
 			<Tab.Screen
-				name='Sell'
-				component={user._id ? Sell : Login}
+				name='SellStack'
+				component={user._id ? SellStack : Login}
 				options={{
 					tabBarLabel: 'Sell',
 					tabBarIcon: ({ color, size }) => <FontAwesome5
@@ -129,6 +145,8 @@ const Stack = () => {
 	>
 		<Stack.Screen name='Tab' component={Tab} />
 		<Stack.Screen name="Details" component={ProductDetails} />
+		<Stack.Screen name="LocationSection" component={SearchSection} />
+		<Stack.Screen name="SearchHome" component={SearchHome} />
 	</Stack.Navigator>
 }
 

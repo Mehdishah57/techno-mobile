@@ -5,15 +5,19 @@ import getCategories from '../../services/getCategories';
 import { useNavigation } from '@react-navigation/native';
 import CategoryBox from '../Home/CategoryBox';
 import ErrorText from '../ErrorText';
+import DropDown from '../DropDown';
+import { TouchableRipple } from 'react-native-paper';
+import SubCategoryBox from './SubCategoryBox';
 
 const CategorySection = ({
   categoryTouched, 
   categoryError, 
   subCategoryTouched, 
   subCategoryError,
-  setFieldValue
+  setFieldValue,
 }) => {
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [theme] = useContext(ThemeContext);
 	const fetchData = useRef(null);
 
@@ -28,19 +32,32 @@ const CategorySection = ({
 		fetchData.current();
 	}, [])
 
-  const handlePress = item => setFieldValue("category",item.name);
+  const handlePress = item => {
+    setFieldValue("category",item.name);
+    setSubCategories(item.subCategories);
+  }
+
+  const handleSubCategoryPress = item => setFieldValue("subCategory", item);
 
   return (
     <View style={[styles.container,backgroundStyles[theme]]}>
       <FlatList 
         data={categories}
-        numColumns={4}
         renderItem={({item})=><CategoryBox 
           onPress={()=>handlePress(item)} 
           item={item}
         />}
+        horizontal
       />
-      <ErrorText touched={categoryTouched} error={categoryError} />
+      <FlatList 
+        data={subCategories}
+        renderItem={({item})=><SubCategoryBox item={item} onPress={()=>handleSubCategoryPress(item)} />}
+        horizontal
+      />
+      <ErrorText 
+        touched={categoryTouched||subCategoryTouched} 
+        error={categoryError||subCategoryError} 
+      />
     </View>
   )
 }

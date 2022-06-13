@@ -15,6 +15,7 @@ import SubCategoryProvider from './global/SubCategoryContext';
 import MainCategoryProvider from './global/MainCategoryContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import SearchProvider from './global/SearchContext';
 
 
 const App = () => {
@@ -23,13 +24,15 @@ const App = () => {
       <ThemeProvider>
         <UserProvider>
           <CityProvider>
-            <MainCategoryProvider>
-              <SubCategoryProvider>
-                <NavigationContainer>
-                  <Stack />
-                </NavigationContainer>
-              </SubCategoryProvider>
-            </MainCategoryProvider>
+            <SearchProvider>
+              <MainCategoryProvider>
+                <SubCategoryProvider>
+                  <NavigationContainer>
+                    <Stack />
+                  </NavigationContainer>
+                </SubCategoryProvider>
+              </MainCategoryProvider>
+            </SearchProvider>
           </CityProvider>
         </UserProvider>
       </ThemeProvider>
