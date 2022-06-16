@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, useWindowDimensions } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import { ThemeContext } from '../global/ThemeContext';
 import { UserContext } from '../global/UserContext';
@@ -6,16 +6,14 @@ import Icon from "react-native-vector-icons/MaterialIcons"
 import getFavourites from '../services/getFavourites';
 import Loader from '../components/Loader';
 import ProductItem from "../components/Card";
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Favourites = ({navigation}) => {
   const [favs, setFavs] = useState([]);
-  const [key, setKey] = useState("");
   const [loading, setLoading] = useState(true);
   const [theme] = useContext(ThemeContext);
   const [user] = useContext(UserContext);
-  const [numColumns, setNumColumns] = useState(2);
   const fetchFavs = useRef(null);
-  const dimensions = useWindowDimensions();
 
   fetchFavs.current = async() => {
     const [data] = await getFavourites(user.favourites);
@@ -27,29 +25,16 @@ const Favourites = ({navigation}) => {
     fetchFavs.current()
   },[])
 
-  useEffect(()=>{
-    console.log(dimensions.width)
-    console.log('cols should be '+ parseInt(dimensions.width/200))
-    if(parseInt(dimensions.width/200) === numColumns) return;
-    setNumColumns(parseInt(dimensions.width/200))
-    setKey((dimensions.width/200).toString())
-  },[dimensions.width])
-
   if(loading) return <Loader />
   return (
     <View style={[styles.main, backgroundStyles[theme]]}>
       <Text style={[styles.header, textStyles[theme]]}>Favourites <Icon name='favorite' size={20} color={"red"} /></Text>
-      <FlatList 
-        key={key}
-        data={favs}
-        renderItem={({item}) => <ProductItem 
+      <ScrollView style={styles.wrapper} contentContainerStyle={styles.wrapperContainer}>
+      {favs.map(item => <ProductItem 
           onPress={()=>navigation.navigate("Details", { _id: item._id })} 
           item={item} 
-        />}
-        collapsable
-        numColumns={numColumns}
-        style={{width: '100%'}}
-      />
+        />)}
+      </ScrollView>
     </View>
   )
 }
@@ -67,6 +52,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     marginBottom: 20
+  },
+  wrapper: {
+    display: 'flex',
+    
+    width: '100%'
+  },
+  wrapperContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    flexDirection:'row'
   }
 })
 
