@@ -7,6 +7,7 @@ import socket from '../socket/socket';
 import TouchBox from '../components/TouchBox';
 import { Colors, TextInput } from 'react-native-paper';
 import sendMessage from '../services/sendMessage';
+import Loader from '../components/Loader';
 
 const Chat = ({ route, navigation }) => {
   const [message, setMessage] = useState("");
@@ -39,21 +40,21 @@ const Chat = ({ route, navigation }) => {
     setChat({ ...chat, messages: temp });
   })
 
-useEffect(() => {
-  fetchChat.current();
-}, [])
+  useEffect(() => {
+    fetchChat.current();
+  }, [])
 
-const handleSubmit = async () => {
-  let otherUser = chat.idOne._id.toString() === user._id ? chat.idTwo._id.toString() : chat.idOne._id.toString();
-  socket.emit("message", { id: otherUser, message, name: user.name, sender: user._id })
-  const [, error] = await sendMessage(otherUser, message);
-  if (error) return;
-  setMessage("");
-}
+  const handleSubmit = async () => {
+    let otherUser = chat.idOne._id.toString() === user._id ? chat.idTwo._id.toString() : chat.idOne._id.toString();
+    socket.emit("message", { id: otherUser, message, name: user.name, sender: user._id })
+    const [, error] = await sendMessage(otherUser, message);
+    if (error) return;
+    setMessage("");
+  }
 
-return (
-  <View style={styles.container}>
-    {!loading ?
+  if(loading) return <Loader />
+  return (
+    <View style={styles.container}>
       <ScrollView
         style={styles.chat}
         ref={scrollViewRef}
@@ -65,26 +66,24 @@ return (
           message={message}
           chat={chat}
         />)}
-      </ScrollView> : <View style={styles.loading}>
-        <ActivityIndicator size={60} animating={true} color={Colors.black} />
-      </View>}
-    <View style={styles.btnView}>
-      <TextInput
-        style={styles.input}
-        mode="flat"
-        label="message"
-        value={message}
-        onChangeText={text => setMessage(text)}
-        theme={{ colors: { text: 'black', primary: 'black', background: 'white' } }}
-      />
-      <TouchBox onPress={handleSubmit}>
-        <View style={styles.btnContainer}>
-          <Text style={styles.btn}>Send</Text>
-        </View>
-      </TouchBox>
+      </ScrollView>
+      <View style={styles.btnView}>
+        <TextInput
+          style={styles.input}
+          mode="flat"
+          label="message"
+          value={message}
+          onChangeText={text => setMessage(text)}
+          theme={{ colors: { text: 'black', primary: 'black', background: 'white' } }}
+        />
+        <TouchBox onPress={handleSubmit}>
+          <View style={styles.btnContainer}>
+            <Text style={styles.btn}>Send</Text>
+          </View>
+        </TouchBox>
+      </View>
     </View>
-  </View>
-)
+  )
 }
 
 const styles = StyleSheet.create({

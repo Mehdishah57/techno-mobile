@@ -29,10 +29,10 @@ const Favourites = ({navigation}) => {
 
   useEffect(()=>{
     console.log(dimensions.width)
-    console.log('cols should be '+ parseInt(dimensions.width/220))
-    if(parseInt(dimensions.width/220) === numColumns) return;
-    setNumColumns(parseInt(dimensions.width/220))
-    setKey((dimensions.width/220).toString())
+    console.log('cols should be '+ parseInt(dimensions.width/200))
+    if(parseInt(dimensions.width/200) === numColumns) return;
+    setNumColumns(parseInt(dimensions.width/200))
+    setKey((dimensions.width/200).toString())
   },[dimensions.width])
 
   if(loading) return <Loader />
@@ -48,6 +48,7 @@ const Favourites = ({navigation}) => {
         />}
         collapsable
         numColumns={numColumns}
+        style={{width: '100%'}}
       />
     </View>
   )

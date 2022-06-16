@@ -3,16 +3,16 @@ import React, { useContext } from 'react';
 import useMessageList from "../hooks/useMessageList";
 import ListItem from '../components/Messages/ListItem';
 import { ThemeContext } from '../global/ThemeContext';
+import Loader from '../components/Loader';
 
 const ChatList = () => {
 	const [list, error, loading] = useMessageList();
 	const [theme] = useContext(ThemeContext);
 
+	if(loading) return <Loader />
 	return (
 		<ScrollView style={[styles.container, backgroundStyles[theme]]}>
-			{loading? 
-				<ActivityIndicator size={60} color="black" />
-			:list.map( item => <ListItem key={item._id} item={item} /> )}
+			{list.map( item => <ListItem key={item._id} item={item} /> )}
 		</ScrollView>
 	)
 }
