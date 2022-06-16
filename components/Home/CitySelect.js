@@ -50,4 +50,4 @@ const textStyles = StyleSheet.create({
 	light: { color: 'black' }
 })
 
-export default CitySelect;
+export default React.memo(CitySelect);

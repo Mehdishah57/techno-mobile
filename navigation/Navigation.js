@@ -39,7 +39,7 @@ const ChatStack = () => {
 	const Stack = createNativeStackNavigator()
 	return <Stack.Navigator
 		screenOptions={() => ({
-			title: 'Chats',
+			headerShown: false,
 		})}
 	>
 		<Stack.Screen name="List" component={ChatList} />

@@ -91,4 +91,4 @@ const textStyles = StyleSheet.create({
     light: { color: 'black' }
 })
 
-export default UserImage;
+export default React.memo(UserImage);

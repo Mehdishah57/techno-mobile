@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default ProductList
+export default React.memo(ProductList)

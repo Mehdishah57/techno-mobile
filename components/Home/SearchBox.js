@@ -40,4 +40,4 @@ const textStyles = StyleSheet.create({
   light: { color: 'black' }
 })
 
-export default SearchBox
+export default React.memo(SearchBox);
