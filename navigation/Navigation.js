@@ -20,6 +20,7 @@ import { ThemeContext } from '../global/ThemeContext';
 import SearchHome from '../screens/SearchHome';
 import LocationSection from '../components/Sell/LocationSection';
 import SearchSection from "../components/Home/SearchSection";
+import ProductBids from '../screens/ProductBids';
 
 const HomeStack = () => {
 	const Stack = createNativeStackNavigator();
@@ -145,6 +146,7 @@ const Stack = () => {
 	>
 		<Stack.Screen name='Tab' component={Tab} />
 		<Stack.Screen name="Details" component={ProductDetails} />
+		<Stack.Screen name="ProductBids" component={ProductBids} />
 		<Stack.Screen name="LocationSection" component={SearchSection} />
 		<Stack.Screen name="SearchHome" component={SearchHome} />
 	</Stack.Navigator>

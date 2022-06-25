@@ -29,6 +29,8 @@ const Favourite = ({ navigation, product }) => {
 				<AntDesignIcons name='heart' color='gray' size={18} />
 			</TouchableOpacity>
 		)
+	
+	if(product.owner?._id === user._id) return null;
 
 	const favourite = user.favourites.find(itm => itm === product._id);
 	if (!favourite) return (

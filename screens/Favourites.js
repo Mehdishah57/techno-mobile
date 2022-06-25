@@ -30,7 +30,8 @@ const Favourites = ({navigation}) => {
     <View style={[styles.main, backgroundStyles[theme]]}>
       <Text style={[styles.header, textStyles[theme]]}>Favourites <Icon name='favorite' size={20} color={"red"} /></Text>
       <ScrollView style={styles.wrapper} contentContainerStyle={styles.wrapperContainer}>
-      {favs.map(item => <ProductItem 
+      {favs.map(item => <ProductItem
+          key={item._id} 
           onPress={()=>navigation.navigate("Details", { _id: item._id })} 
           item={item} 
         />)}

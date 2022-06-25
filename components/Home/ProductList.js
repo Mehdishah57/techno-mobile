@@ -1,4 +1,4 @@
-import { StyleSheet, FlatList } from 'react-native'
+import { StyleSheet, ScrollView, Text, RefreshControl } from 'react-native'
 import React, {useState, useRef, useEffect, useContext} from 'react'
 import getFreshProducts from '../../services/getFreshProducts';
 import CardSkeletonList from '../CardSkeletonList';
@@ -17,6 +17,7 @@ const ProductList = ({navigation}) => {
 	fetchProducts.current = async (payload) => {
 		setLoading(true);
 		setShouldUpdate(true);
+		setPageNumber(1);
 		const [data, error] = await getFreshProducts(payload);
 		if (error) return console.log(error.response?.data);
 		setProducts(data);
@@ -53,26 +54,64 @@ const ProductList = ({navigation}) => {
             setPageNumber(prevNo => prevNo + 1)
     }
 
-    return (
-        <FlatList
-            style={styles.products}
-            numColumns={2}
-            data={products}
-            renderItem={({ item }) => <ProductItem
-                item={item}
-                onPress={() => navigation.navigate("Details", { _id: item._id })}
-            />}
-            onEndReached={handlePageChange}
-            refreshing={loading}
-            onRefresh={() => setPageNumber(1)}
-            ListFooterComponent={loading ? CardSkeletonList : undefined}
-        />
-    )
+	const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+		const paddingToBottom = 20;
+		return layoutMeasurement.height + contentOffset.y >=
+		  contentSize.height - paddingToBottom;
+		};
+
+	return(
+		<ScrollView 
+			style={styles.products} 
+			contentContainerStyle={styles.container}
+			refreshControl={<RefreshControl 
+				refreshing={loading}
+				onRefresh={()=>setPageNumber(1)}
+			/>}
+			onMomentumScrollEnd={(event) => { 
+				if (isCloseToBottom(event.nativeEvent)) {
+					handlePageChange()
+				}
+			   }
+			 }
+		>
+			{products.length ? products.map(item => <ProductItem
+				key={item._id}
+				item={item} 
+				onPress={() => navigation.navigate("Details", { _id: item._id })} />)
+			:null}
+			{!products.length && !loading ? <Text style={styles.noResult}>No Results</Text> : null}
+			{loading ? <CardSkeletonList /> :null}
+		</ScrollView>
+	)
+
+    // return (
+    //     <FlatList
+    //         style={styles.products}
+    //         numColumns={2}
+    //         data={products}
+    //         renderItem={({ item }) => <ProductItem
+    //             item={item}
+    //             onPress={() => navigation.navigate("Details", { _id: item._id })}
+    //         />}
+    //         onEndReached={handlePageChange}
+    //         refreshing={loading}
+    //         onRefresh={() => setPageNumber(1)}
+    //         ListFooterComponent={loading ? CardSkeletonList : undefined}
+    //     />
+    // )
 }
 
 const styles = StyleSheet.create({
 	products: {
+		display: 'flex',
 		width: '100%'
+	},
+	container: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection:'row',
+		flexWrap: 'wrap'
 	},
 	scroll: {
 		display: 'flex',

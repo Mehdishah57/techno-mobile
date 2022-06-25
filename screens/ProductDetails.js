@@ -13,14 +13,17 @@ import Carousel from '../components/ProductDetails/Carousel';
 import fetchProductyById from "../services/fetchProductById";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { UserContext } from '../global/UserContext';
+import { ThemeContext } from '../global/ThemeContext';
 import Favourite from '../components/ProductDetails/Favourite';
 import MessageDialog from '../components/MessageDialog';
+import BidForm from '../components/ProductDetails/BidForm';
 
 const ProductDetails = ({ route, navigation }) => {
 	const [product, setProduct] = useState({});
 	const [loading, setLoading] = useState(true);
 	const [visible, setVisible] = useState(false);
 	const [user, setUser] = useContext(UserContext);
+	const [theme] = useContext(ThemeContext);
 	const fetchProduct = useRef();
 
 	fetchProduct.current = async () => {
@@ -45,36 +48,42 @@ const ProductDetails = ({ route, navigation }) => {
 		Linking.openURL(number);
 	}
 
-	if (loading) return <View style={styles.loadingContainer}>
-		<ActivityIndicator size="large" animating={true} color={Colors.black} />
+	if (loading) return <View style={[styles.loadingContainer, backgroundStyles[theme]]}>
+		<ActivityIndicator size="large" animating={true} color={textStyles[theme].color} />
 	</View>
 	return (
-		<View style={styles.container}>
-			<Carousel images={product?.picture} />
-			<ScrollView >
+		<View style={[styles.container, backgroundStyles[theme]]}>
+			<ScrollView>
+				<Carousel images={product?.picture} />
 				<View style={styles.head}>
 					<View style={styles.headOne}>
 						<Text style={styles.price}>RS: {product.price}</Text>
 						<Favourite navigation={navigation} product={product} />
 					</View>
-					<Text style={styles.title}>{product.title}</Text>
-					<Text style={styles.city}>{product.location?.city}</Text>
+					<Text style={[styles.title, textStyles[theme]]}>{product.title}</Text>
+					<Text style={[styles.city,textStyles[theme]]}>{product.location?.city}</Text>
 				</View>
 				<Text style={styles.descriptionHead}>Description</Text>
 				<View style={styles.descriptionContainer}>
-					<Text style={styles.description}>{product.description}</Text>
+					<Text style={[styles.description,textStyles[theme]]}>{product.description}</Text>
 				</View>
 			</ScrollView>
 			<MessageDialog visible={visible} setVisible={setVisible} product={product} />
 			<View style={styles.btnContiner}>
-				<TouchableOpacity onPress={()=>setVisible(true)}>
-					<View style={styles.btn}>
+				<TouchableOpacity onPress={user._id === product.owner?._id? null :()=>setVisible(true)}>
+					<View style={[styles.btn, btnBackground[theme]]}>
 						<MaterialCommunityIcons name='message' color="white" size={20} />
 						<Text style={styles.btnText}>Message</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={handleCall}>
-					<View style={styles.btn}>
+				<TouchableOpacity onPress={()=>navigation.navigate("ProductBids", {product})}>
+					<View style={[styles.btn, btnBackground[theme]]}>
+						<MaterialCommunityIcons name='offer' color="white" size={20} />
+						<Text style={styles.btnText}>Bids</Text>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={user._id === product.owner?._id? null :handleCall}>
+					<View style={[styles.btn,btnBackground[theme]]}>
 						<MaterialCommunityIcons name='phone' color="white" size={20} />
 						<Text style={styles.btnText}>Call</Text>
 					</View>
@@ -160,7 +169,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'black',
 		padding: 10,
 		width: 120,
 		borderRadius: 10
@@ -170,7 +178,22 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		textAlign: 'center',
 		marginLeft: 5
-	}
+	},
 })
+
+const backgroundStyles = StyleSheet.create({
+	dark: { backgroundColor: 'black' },
+	light: { backgroundColor: 'white' }
+  })
+  
+  const textStyles = StyleSheet.create({
+	dark: { color: 'gray' },
+	light: { color: 'black' }
+  })
+
+  const btnBackground = StyleSheet.create({
+	dark: { backgroundColor: '#333333' },
+	light: { backgroundColor: 'black' }
+  })
 
 export default ProductDetails;

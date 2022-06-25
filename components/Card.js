@@ -41,6 +41,7 @@ const ProductItem = ({ item, onPress }) => {
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <FontAwesome5 name='heart' color='gray' size={18} />
       </TouchableOpacity>)
+    else if(item.owner === user._id) return null;
     const favourite = user.favourites.find(itm => itm === item._id);
     if(!favourite) return(
       <TouchableOpacity onPress={handleAdd}>
