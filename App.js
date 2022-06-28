@@ -16,9 +16,12 @@ import MainCategoryProvider from './global/MainCategoryContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SearchProvider from './global/SearchContext';
-
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
+  React.useEffect(()=>{
+    SplashScreen.hide();
+  },[])
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>

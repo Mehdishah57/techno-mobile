@@ -30,8 +30,11 @@ const ProductBids = ({ route, navigation }) => {
         <ScrollView style={[styles.main, backgroundStyles[theme]]} contentContainerStyle={styles.mainContainer}>
             {user._id === product.owner?._id ?
                 null
-                : <><Text style={[styles.head, textStyles[theme]]}>View and Place Bids</Text>
-                    <BidForm fetchBid={fetchBid.current} loading={loading} setLoading={setLoading} productId={product._id} /></>}
+                : 
+                <>
+                    <Text style={[styles.head, textStyles[theme]]}>View and Place Bids</Text>
+                    <BidForm fetchBid={fetchBid.current} loading={loading} setLoading={setLoading} productId={product._id} />
+                </>}
             {bids.map(item => <BidItem item={item} key={item._id} />)}
             {!loading && !bids.length ? <Text style={[styles.noResult, textStyles[theme]]}>Product Doesn't have any bids</Text> : null}
         </ScrollView>
