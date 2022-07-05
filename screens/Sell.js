@@ -21,7 +21,7 @@ const Sell = ({ route, navigation }) => {
 			text: textStyles[theme].color,
 			placeholder: textStyles[theme].color,
 			primary: textStyles[theme].color,
-      background: backgroundStyles[theme].color
+      background: backgroundStyles[theme].backgroundColor
 		}
 	}), [theme])
 
@@ -141,7 +141,7 @@ const Sell = ({ route, navigation }) => {
                 styles.btnView, 
                 backgroundStyles[theme==="dark"?"light":"dark"],
                 borderStyles[theme]]}>             
-                  <Text style={[styles.btnText, textStyles[theme==="dark"?"light":"dark"]]}>PUBLISH NOW</Text>               
+                  <Text style={[styles.btnText, theme!=='light'?textStyles["light"]: {color: 'white'}]}>PUBLISH NOW</Text>               
               </TouchableRipple>
             </View>
           </ScrollView>
@@ -199,12 +199,12 @@ const backgroundStyles = StyleSheet.create({
 })
 
 const textStyles = StyleSheet.create({
-  dark: { color: 'white' },
+  dark: { color: 'gray' },
   light: { color: 'black' }
 })
 
 const borderStyles = StyleSheet.create({
-  dark: { borderColor: 'white' },
+  dark: { borderColor: 'gray' },
   light: {  borderColor: 'black' }
 })
 

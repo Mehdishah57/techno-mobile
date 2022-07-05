@@ -5,10 +5,12 @@ import { bidSchema } from '../../schemas/bid';
 import { TextInput, TouchableRipple, HelperText } from 'react-native-paper';
 import { ThemeContext } from '../../global/ThemeContext';
 import bidItem from '../../services/bidItem';
-import ErrorText from '../ErrorText';
+import socket from '../../socket/socket';
+import { UserContext } from '../../global/UserContext';
 
-const BidForm = ({ productId, setLoading, fetchBid }) => {
+const BidForm = ({ productId, setLoading, fetchBid, product }) => {
     const [theme] = useContext(ThemeContext);
+    const [user] = useContext(UserContext);
 
     const handleSubmit = async values => {
         setLoading(true);
@@ -17,8 +19,12 @@ const BidForm = ({ productId, setLoading, fetchBid }) => {
             setLoading(false);
             return alert(error.response?.data||"Failed to place bid");  
         } 
+        socket.emit("bid-event", {
+            by: { _id: user._id, name: user.name },
+            to: product.owner._id, price: values.bid, product: product.title,
+            data
+        });
         fetchBid();
-        alert("Successfully placed bid");
     }
 
     const fieldTheme = useMemo(() => ({
@@ -37,7 +43,8 @@ const BidForm = ({ productId, setLoading, fetchBid }) => {
                 validationSchema={bidSchema}
                 onSubmit={handleSubmit}
             >
-                {({ handleSubmit, handleChange, errors, touched, setFieldTouched }) => <View style={styles.container}>
+                {({ handleSubmit, handleChange, errors, touched, setFieldTouched }) => <>
+                <View style={styles.container}>
                     <View style={styles.inputContainer}>
                         <TextInput
                             label="Bid"
@@ -47,14 +54,15 @@ const BidForm = ({ productId, setLoading, fetchBid }) => {
                             theme={fieldTheme}
                             error={touched.bid && errors.bid}
                         />
-                        <HelperText type='error' visible={touched.bid && errors.bid}>
+                    </View>
+                    <TouchableRipple style={[styles.button, buttonStyles[theme]]} onPress={handleSubmit}>
+                        <Text style={[styles.btnText, buttonTextStyles[theme]]}>Bid</Text>
+                    </TouchableRipple>
+                </View>
+                <HelperText type='error' visible={touched.bid && errors.bid}>
                             {errors.bid}
                         </HelperText>
-                    </View>
-                    <TouchableRipple style={[styles.button, backgroundStyles[theme]]} onPress={handleSubmit}>
-                        <Text style={[styles.btnText, textStyles[theme]]}>Bid</Text>
-                    </TouchableRipple>
-                </View>}
+                </>}
             </Formik>
         </View>
     )
@@ -87,7 +95,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     btnText: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight: 'bold'
     }
 })
 
@@ -101,5 +110,12 @@ const textStyles = StyleSheet.create({
     light: { color: 'black' }
 })
 
+const buttonStyles = StyleSheet.create({
+    light: { backgroundColor: 'black' }
+})
+
+const buttonTextStyles = StyleSheet.create({
+    light: { color: 'white' }
+})
 
 export default BidForm

@@ -7,7 +7,7 @@ const ErrorText = ({ touched, error }) => {
 }
 
 const styles = StyleSheet.create({
-    error: { fontSize: 14, color: 'red' }
+    error: { fontSize: 13, color: 'brown' }
 })
 
 export default ErrorText

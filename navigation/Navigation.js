@@ -21,6 +21,19 @@ import SearchHome from '../screens/SearchHome';
 import LocationSection from '../components/Sell/LocationSection';
 import SearchSection from "../components/Home/SearchSection";
 import ProductBids from '../screens/ProductBids';
+import Verify from '../screens/Verify';
+
+
+const VerifyStack = () => {
+	const Stack = createNativeStackNavigator();
+	return <Stack.Navigator
+	screenOptions={{
+		headerShown: false
+	}}
+>
+	<Stack.Screen name='Verify' component={Verify} />
+</Stack.Navigator>
+}
 
 const HomeStack = () => {
 	const Stack = createNativeStackNavigator();
@@ -38,18 +51,19 @@ const HomeStack = () => {
 
 const ChatStack = () => {
 	const Stack = createNativeStackNavigator()
+
 	return <Stack.Navigator
 		screenOptions={() => ({
 			headerShown: false,
 		})}
 	>
 		<Stack.Screen name="List" component={ChatList} />
-		<Stack.Screen options={() => ({})} name="Chat" component={Chat} />
 	</Stack.Navigator>
 }
 
 const ProfileStack = () => {
 	const Stack = createNativeStackNavigator()
+
 	return <Stack.Navigator
 		screenOptions={() => ({
 			headerShown: false
@@ -81,6 +95,9 @@ const Tab = () => {
 	const [user] = useContext(UserContext)
 	const [theme] = useContext(ThemeContext);
 	const Tab = createBottomTabNavigator();
+
+	var render = (Element) => user.verified ? Element: VerifyStack 
+
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
@@ -105,18 +122,27 @@ const Tab = () => {
 			/>
 			<Tab.Screen
 				name='Chats'
-				component={user._id ? ChatStack : Login}
+				component={user._id ? render(ChatStack) : Login}
 				options={{
 					tabBarLabel: 'Chat',
 					tabBarIcon: ({ color, size }) => <FontAwesome5
 						name='envelope'
 						color={color}
-						size={size} />
+						size={size} />,
+					tabBarVisibilityAnimationConfig: {
+						show: {
+							animation: 'spring',
+							config: {
+								bounciness: 45,
+								delay: 1000
+							}
+						}
+					}
 				}}
 			/>
 			<Tab.Screen
 				name='SellStack'
-				component={user._id ? SellStack : Login}
+				component={user._id ? render(SellStack) : Login}
 				options={{
 					tabBarLabel: 'Sell',
 					tabBarIcon: ({ color, size }) => <FontAwesome5
@@ -125,7 +151,7 @@ const Tab = () => {
 						size={size} />
 				}}
 			/>
-			<Tab.Screen name='User' component={user._id ? ProfileStack : Login}
+			<Tab.Screen name='User' component={user._id ? render(ProfileStack) : Login}
 				options={{
 					tabBarLabel: 'User',
 					tabBarIcon: ({ color, size }) => <FontAwesome5
@@ -149,6 +175,9 @@ const Stack = () => {
 		<Stack.Screen name="ProductBids" component={ProductBids} />
 		<Stack.Screen name="LocationSection" component={SearchSection} />
 		<Stack.Screen name="SearchHome" component={SearchHome} />
+		<Stack.Screen options={() => ({
+			headerShown: true
+		})} name="Chat" component={Chat} />
 	</Stack.Navigator>
 }
 
