@@ -22,6 +22,7 @@ import LocationSection from '../components/Sell/LocationSection';
 import SearchSection from "../components/Home/SearchSection";
 import ProductBids from '../screens/ProductBids';
 import Verify from '../screens/Verify';
+import Filters from '../screens/Filters';
 
 
 const VerifyStack = () => {
@@ -46,6 +47,7 @@ const HomeStack = () => {
 		<Stack.Screen name='SignUp' component={Signup} />
 		<Stack.Screen name="SubCategory" component={SubCategoryList} />
 		<Stack.Screen name="Cities" component={CityList} />
+		<Stack.Screen name="SearchHome" component={SearchHome} />
 	</Stack.Navigator>
 }
 
@@ -174,7 +176,7 @@ const Stack = () => {
 		<Stack.Screen name="Details" component={ProductDetails} />
 		<Stack.Screen name="ProductBids" component={ProductBids} />
 		<Stack.Screen name="LocationSection" component={SearchSection} />
-		<Stack.Screen name="SearchHome" component={SearchHome} />
+		<Stack.Screen name="Filters" component={Filters} />
 		<Stack.Screen options={() => ({
 			headerShown: true
 		})} name="Chat" component={Chat} />

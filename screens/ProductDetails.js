@@ -76,7 +76,7 @@ const ProductDetails = ({ route, navigation }) => {
 						<Text style={styles.btnText}>Message</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={()=>navigation.navigate("ProductBids", {product})}>
+				<TouchableOpacity onPress={!user._id?()=>navigation.navigate("Login"):()=>navigation.navigate("ProductBids", {product})}>
 					<View style={[styles.btn, btnBackground[theme]]}>
 						<MaterialCommunityIcons name='offer' color="white" size={20} />
 						<Text style={styles.btnText}>Bids</Text>

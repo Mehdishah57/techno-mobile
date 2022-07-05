@@ -13,29 +13,32 @@ import ThemeProvider from './global/ThemeContext';
 import CityProvider from './global/CityContext';
 import SubCategoryProvider from './global/SubCategoryContext';
 import MainCategoryProvider from './global/MainCategoryContext';
+import SearchProvider from './global/SearchContext';
+import FilterProvider from "./global/FilterContext";
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import SearchProvider from './global/SearchContext';
 import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
-  React.useEffect(()=>{
+  React.useEffect(() => {
     SplashScreen.hide();
-  },[])
+  }, [])
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>
         <UserProvider>
           <CityProvider>
-            <SearchProvider>
-              <MainCategoryProvider>
-                <SubCategoryProvider>
-                  <NavigationContainer>
-                    <Stack />
-                  </NavigationContainer>
-                </SubCategoryProvider>
-              </MainCategoryProvider>
-            </SearchProvider>
+            <FilterProvider>
+              <SearchProvider>
+                <MainCategoryProvider>
+                  <SubCategoryProvider>
+                    <NavigationContainer>
+                      <Stack />
+                    </NavigationContainer>
+                  </SubCategoryProvider>
+                </MainCategoryProvider>
+              </SearchProvider>
+            </FilterProvider>
           </CityProvider>
         </UserProvider>
       </ThemeProvider>

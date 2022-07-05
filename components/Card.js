@@ -75,10 +75,11 @@ const styles = StyleSheet.create({
     width: '45%',
     height: 290,
     borderRadius: 10,
-    margin: 10,
     borderRadius: 20,
     overflow: 'hidden',
-    maxWidth: 200
+    maxWidth: 200,
+    marginBottom: 10,
+    marginTop: 10
   },
   text: {
     fontSize: 12,

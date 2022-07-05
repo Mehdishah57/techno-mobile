@@ -2,10 +2,14 @@ import React, { useState, useContext, useMemo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Dialog, Portal, Provider, TextInput, TouchableRipple } from 'react-native-paper';
 import { ThemeContext } from '../global/ThemeContext';
+import { UserContext } from '../global/UserContext';
+import sendMessage from '../services/sendMessage';
+import socket from '../socket/socket';
 
 const MessageDialog = ({ visible, setVisible, product }) => {
 	const [text, setText] = useState("");
 	const [theme] = useContext(ThemeContext);
+	const [user] = useContext(UserContext);
 
 	const fieldTheme = useMemo(() => ({
 		colors: {
@@ -22,6 +26,9 @@ const MessageDialog = ({ visible, setVisible, product }) => {
 
 	const handleSend = async() => {
 		if(!text) return hideDialog();
+		socket.emit("message", { id: product.owner?._id, message: text, name: user.name, sender: user._id })
+		sendMessage(product.owner?._id, text);
+		hideDialog();
 	}
 
 	return (
