@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, Text, RefreshControl } from 'react-native'
+import { StyleSheet, ScrollView, Text, RefreshControl, FlatList } from 'react-native'
 import React, {useState, useRef, useEffect, useContext} from 'react'
 import getFreshProducts from '../../services/getFreshProducts';
 import CardSkeletonList from '../CardSkeletonList';
@@ -39,8 +39,9 @@ const ProductList = ({navigation}) => {
 	}
 
     useEffect(() => {
+		if(pageNumber !== 1) return;
         fetchProducts.current({ pageNumber: 1, pageSize, city: cities._id });
-    }, [cities]);
+    }, [cities._id]);
 
     useEffect(() => {
         if (pageNumber === 1) return;
@@ -50,7 +51,7 @@ const ProductList = ({navigation}) => {
 
     const handlePageChange = () => {
         if (!shouldUpdate) return;
-        if (products.length % pageSize === 0)
+        if (products.length/pageNumber >= pageSize)
             setPageNumber(prevNo => prevNo + 1)
     }
 
@@ -66,7 +67,7 @@ const ProductList = ({navigation}) => {
 			contentContainerStyle={styles.container}
 			refreshControl={<RefreshControl 
 				refreshing={loading}
-				onRefresh={()=>setPageNumber(1)}
+				onRefresh={()=>fetchProducts.current({ pageNumber: 1, pageSize, city: cities._id })}
 			/>}
 			onMomentumScrollEnd={(event) => { 
 				if (isCloseToBottom(event.nativeEvent)) {
@@ -96,7 +97,7 @@ const ProductList = ({navigation}) => {
     //         />}
     //         onEndReached={handlePageChange}
     //         refreshing={loading}
-    //         onRefresh={() => setPageNumber(1)}
+    //         onRefresh={() => fetchProducts.current({ pageNumber: 1, pageSize, city: cities._id })}
     //         ListFooterComponent={loading ? CardSkeletonList : undefined}
     //     />
     // )

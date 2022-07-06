@@ -58,7 +58,7 @@ const ProductList = ({navigation}) => {
 
     const handlePageChange = () => {
         if (!shouldUpdate) return;
-        if (products.length % pageSize === 0)
+        if (products.length/pageNumber >= pageSize)
             setPageNumber(prevNo => prevNo + 1)
     }
 
@@ -74,7 +74,7 @@ const ProductList = ({navigation}) => {
 			contentContainerStyle={styles.container}
 			refreshControl={<RefreshControl 
 				refreshing={loading}
-				onRefresh={()=>setPageNumber(1)}
+				onRefresh={()=>fetchProducts.current({ pageNumber: 1, pageSize, search, filters: {search, mainCategory, subCategory, city: cities._id}  })}
 			/>}
 			onMomentumScrollEnd={(event) => { 
 				if (isCloseToBottom(event.nativeEvent)) {
@@ -92,32 +92,16 @@ const ProductList = ({navigation}) => {
 			{loading ? <CardSkeletonList /> :null}
 		</ScrollView>
 	)
-
-    // return (
-    //     <FlatList
-    //         style={styles.products}
-    //         numColumns={2}
-    //         data={products}
-    //         renderItem={({ item }) => <ProductItem
-    //             item={item}
-    //             onPress={() => navigation.navigate("Details", { _id: item._id })}
-    //         />}
-    //         onEndReached={handlePageChange}
-    //         refreshing={loading}
-    //         onRefresh={() => setPageNumber(1)}
-    //         ListFooterComponent={loading ? CardSkeletonList : undefined}
-    //     />
-    // )
 }
 
 const styles = StyleSheet.create({
 	products: {
 		display: 'flex',
 		width: '100%',
-        height:'100%'
+		marginBottom: 100
 	},
 	container: {
-		justifyContent: 'center',
+		justifyContent: 'space-evenly',
 		alignItems: 'center',
 		flexDirection:'row',
 		flexWrap: 'wrap'
